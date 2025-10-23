@@ -10,10 +10,18 @@ else
   ollama_opts="--hidethinking"
 fi
 
-if [ -t 0 ] && [ -n "$1" ]; then
-  # prompt passed as an argument
-  ollama run "$model" $ollama_opts "$*"
-else
-  # prompt from stdin (pipe or here-doc)
-  ollama run "$model" $ollama_opts
+# Prepare system information context
+system_info="System: $(uname -s) $(uname -m) | Kernel: $(uname -r) | Shell: $SHELL"
+
+# Check if at least one argument is provided
+if [ $# -eq 0 ]; then
+  echo "Usage: ask <question>"
+  echo "Example: ask 'list files in current directory'"
+  exit 1
 fi
+
+# prompt passed as an argument
+{
+  echo "SYSTEM: $system_info"
+  echo "USER: $*"
+} | ollama run "$model" $ollama_opts
