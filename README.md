@@ -6,9 +6,10 @@ A simple CLI tool that uses Ollama and local LLMs to generate shell commands in 
 
 - 🤖 Uses local LLM (Qwen3:8b) for privacy
 - 📝 Generates commands in tldr format with brief descriptions
-- 🔧 Supports both argument and stdin input
+- 🔧 Simple command line argument interface
 - 🐛 Debug mode for troubleshooting
 - ⚡ Fast command generation with safe defaults
+- 🖥️ Automatically provides system information context for better command adaptation
 
 ## Prerequisites
 
@@ -44,23 +45,12 @@ ask "list files in current directory"
 #         ls -la
 ```
 
-### Pipe Input
-
-You can also pipe questions to the tool:
+For multi-line questions, use quotes:
 ```bash
-echo "create tar archive" | ask
-# Output: Create compressed tar archive:
-#         tar -czf archive.tar.gz files/
-```
-
-### Here-doc Usage
-
-For multi-line questions:
-```bash
-ask <<EOF
-create tar archive
-with password protection
-EOF
+ask "create tar archive
+with password protection"
+# Output: Create password-protected tar archive:
+#         tar -czf archive.tar.gz --password files/
 ```
 
 ## Configuration
@@ -83,6 +73,15 @@ The model is configured with these parameters:
 - Temperature: 0.15 (balanced creativity/consistency)
 - Context window: 2048 tokens
 - Max prediction: 1024 tokens
+
+### System Information Context
+
+The tool automatically provides system information to the AI model before processing your request. This includes:
+- Operating system name and architecture
+- Kernel version
+- Current shell
+
+This context helps the AI generate more appropriate commands for your specific system. For example, it will suggest `brew` commands on macOS, `apt` commands on Debian/Ubuntu, etc.
 
 ## Examples
 
