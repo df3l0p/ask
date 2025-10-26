@@ -47,7 +47,8 @@ ask "list files in current directory"
 
 For multi-line questions, use quotes:
 ```bash
-ask "create tar archive with password protection"
+ask "create tar archive
+with password protection"
 # Output: Create password-protected tar archive:
 #         tar -czf archive.tar.gz --password files/
 ```
